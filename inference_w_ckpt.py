@@ -1,17 +1,15 @@
 
 from transformers import pipeline , WhisperForConditionalGeneration, WhisperProcessor , WhisperFeatureExtractor , WhisperTokenizer
-import whisper
 import torchaudio
 
 ## Current directory need to set
-model = WhisperForConditionalGeneration.from_pretrained("./").to("cuda")
-processor = WhisperProcessor.from_pretrained("./")
-tokenizer = WhisperTokenizer.from_pretrained("./")
+model = WhisperForConditionalGeneration.from_pretrained("/home/asif/stt_all/whisper/from_150_136_219_192/whisper_final/ckpt/best_checkpoint").to("cuda")
+processor = WhisperProcessor.from_pretrained("openai/whisper-small")
+tokenizer = WhisperTokenizer.from_pretrained("openai/whisper-small")
 
 
-filename = "path/of/any/audio/file"
+filename = "/home/asif/stt_all/whisper/from_150_136_219_192/whisper_final/0a0d3225-a989-4ba2-b2c9-7f09c8a3cb6b.wav"
 audio, sample_rate = torchaudio.load(filename)
-
 
 model.eval()
 
@@ -23,15 +21,4 @@ generated_text = processor.tokenizer.batch_decode(generated_ids, skip_special_to
 print(generated_text)
 
 
-""" Didn't work
-# make log-Mel spectrogram and move to the same device as the model
-options = whisper.DecodingOptions(fp16 = False)
-mel = whisper.log_mel_spectrogram(audio).to(model.device)
-
-# detect the spoken language
-_, probs = model.detect_language(mel)
-
-# decode the audio
-result = whisper.decode(model, mel, options)
-"""
 
